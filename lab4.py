@@ -49,7 +49,7 @@ if __name__ == '__main__':
     # Setup argument parser
     parser = argparse.ArgumentParser(description='PyTorch MNIST Training')
     parser.add_argument('--batch-size', default=128, type=int, help='batch size')
-    parser.add_argument('--device', default='cpu', type=str, help='Device on which to run: "cuda" or "cpu"')
+    parser.add_argument('--device', default='cuda', type=str, help='Device on which to run: "cuda" or "cpu"')
     parser.add_argument('--epochs', default=100, type=int, help='total epochs to run')
     parser.add_argument('--layer-sizes', nargs='+', type=int, default=[1000, 10000, 50000, 100000, 300000, 500000], help='List of layer sizes')
     args = parser.parse_args()
