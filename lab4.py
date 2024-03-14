@@ -61,7 +61,6 @@ def save_combined_joint_plot(train_data, val_data, title, folder, filename, laye
     plt.close()
 
 if __name__ == '__main__':
-    # Setup argument parser
     parser = argparse.ArgumentParser(description='PyTorch MNIST Training')
     parser.add_argument('--batch-size', default=128, type=int, help='batch size')
     parser.add_argument('--device', default='cuda', type=str, help='Device on which to run: "cuda" or "cpu"')
@@ -69,7 +68,6 @@ if __name__ == '__main__':
     parser.add_argument('--layer-sizes', nargs='+', type=int, default=[1000, 10000, 50000, 100000, 300000, 500000], help='List of layer sizes')
     args = parser.parse_args()
 
-    # Use the specified device
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
     folders = ["individual", "train", "test", "joint"]
@@ -106,7 +104,7 @@ if __name__ == '__main__':
         trial = Trial(model, optimizer, loss_function, metrics=['accuracy', 'loss']).to(device)
         trial.with_generators(trainloader, val_generator=testloader)
         
-        history = trial.run(epochs=2)
+        history = trial.run(epochs=args.epochs)
         results = trial.evaluate(data_key=torchbearer.TEST_DATA)
         
         
