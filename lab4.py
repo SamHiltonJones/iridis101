@@ -33,7 +33,7 @@ def save_combined_plot(train_data, test_data, title, folder, filename, label1='T
     plt.plot(test_data, label=label2)
     plt.title(title)
     plt.legend()
-    plt.savefig(f"results/{folder}/{filename}.png")
+    plt.savefig(f"results_small/{folder}/{filename}.png")
     plt.close()
 
 def save_joint_plot(data, title, folder, filename, layer_sizes):
@@ -42,7 +42,7 @@ def save_joint_plot(data, title, folder, filename, layer_sizes):
         plt.plot(data[i], label=f'Layer Size {size}')
     plt.title(title)
     plt.legend()
-    plt.savefig(f"results/{folder}/{filename}.png")
+    plt.savefig(f"results_small/{folder}/{filename}.png")
     plt.close()
     
 def save_combined_joint_plot(train_data, val_data, title, folder, filename, layer_sizes):
@@ -57,10 +57,11 @@ def save_combined_joint_plot(train_data, val_data, title, folder, filename, laye
 
     plt.title(title)
     plt.legend()
-    plt.savefig(f"results/{folder}/{filename}.png")
+    plt.savefig(f"results_small/{folder}/{filename}.png")
     plt.close()
 
 if __name__ == '__main__':
+    # Setup argument parser
     parser = argparse.ArgumentParser(description='PyTorch MNIST Training')
     parser.add_argument('--batch-size', default=128, type=int, help='batch size')
     parser.add_argument('--device', default='cuda', type=str, help='Device on which to run: "cuda" or "cpu"')
@@ -68,11 +69,12 @@ if __name__ == '__main__':
     parser.add_argument('--layer-sizes', nargs='+', type=int, default=[1000, 10000, 50000, 100000, 300000], help='List of layer sizes')
     args = parser.parse_args()
 
+    # Use the specified device
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
     folders = ["individual", "train", "test", "joint"]
     for folder in folders:
-        os.makedirs(f"results/{folder}", exist_ok=True)
+        os.makedirs(f"results_small/{folder}", exist_ok=True)
 
     seed = 7
     torch.manual_seed(seed)
@@ -114,7 +116,7 @@ if __name__ == '__main__':
         train_acc = [epoch['acc'] for epoch in history]
         val_acc = [epoch['val_acc'] for epoch in history]
             
-        torch.save(model.state_dict(), f'results/model_weights_{size}.pth')
+        torch.save(model.state_dict(), f'results_small/model_weights_{size}.pth')
 
         all_train_acc.append(train_acc)
         all_val_acc.append(val_acc)
@@ -140,7 +142,7 @@ if __name__ == '__main__':
         "all_val_loss": {str(size): losses for size, losses in zip(args.layer_sizes, all_val_loss)}
     }
 
-    with open('results/results_data.json', 'w') as json_file:
+    with open('results_small/results_data.json', 'w') as json_file:
         json.dump(results_data, json_file, indent=4)
 
-    print("Accuracy and loss data saved to results/results_data.json")
+    print("Accuracy and loss data saved to results_small/results_data.json")
